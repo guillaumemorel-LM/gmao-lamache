@@ -7,7 +7,6 @@
     
     <!-- Google API -->
     <script src="https://apis.google.com/js/api.js"></script>
-    
     <style>
         * {
             margin: 0;
@@ -666,7 +665,7 @@
     <!-- Login Screen -->
     <div class="login-container" id="loginContainer">
         <div class="login-box">
-            <img src="/mnt/user-data/uploads/Logo-LAMACHE-lycee_Blanc.jpg" alt="École La Mache" class="login-logo">
+            <img src="images/Logo-LAMACHE-lycee_Blanc.jpg" alt="École La Mache" class="login-logo">
             <h1>GMAO BAES/DM</h1>
             <p>École La Mache - Gestion de maintenance</p>
             
@@ -690,7 +689,7 @@
         <!-- Top Header -->
         <div class="top-header">
             <div class="top-header-left">
-                <img src="/mnt/user-data/uploads/Logo-LAMACHE-lycee_Blanc.jpg" alt="La Mache" class="header-logo">
+                <img src="images/Logo-LAMACHE-lycee_Blanc.jpg" alt="La Mache" class="header-logo">
                 <div class="header-text">
                     <h1>GMAO BAES/DM - École La Mache</h1>
                     <p>Gestion de Maintenance Assistée par Ordinateur</p>
@@ -698,303 +697,8 @@
             </div>
             <div class="top-header-right">
                 <div class="user-badge">
-                    <span id="userEmail"></span>
-                    <span class="user-role" id="userRole">Utilisateur</span>
-                </div>
-                <button class="logout-btn" onclick="handleLogout()">Déconnexion</button>
-            </div>
-        </div>
-        
-        <!-- Navigation Menu -->
-        <div class="nav-menu">
-            <div class="nav-item active" onclick="switchModule('dashboard')">
-                📊 Tableau de bord
-                <span class="nav-badge hidden" id="dashboardBadge">0</span>
-            </div>
-            <div class="nav-item" onclick="switchModule('verif-baes')">
-                ✅ Vérifications BAES
-                <span class="nav-badge hidden" id="baesAlertBadge">0</span>
-            </div>
-            <div class="nav-item" onclick="switchModule('verif-dm')">
-                ✅ Vérifications DM
-                <span class="nav-badge hidden" id="dmAlertBadge">0</span>
-            </div>
-            <div class="nav-item" onclick="switchModule('gestion')">
-                ⚙️ Gestion équipements
-            </div>
-        </div>
-        
-        <!-- Main Content Area -->
-        <div class="main-content">
-            <!-- MODULE 1: Dashboard -->
-            <div class="module-container active" id="module-dashboard">
-                <div class="dashboard">
-                    <div class="dashboard-grid">
-                        <div class="stat-card">
-                            <h3>BAES Total</h3>
-                            <div class="stat-value" id="totalBaes">0</div>
-                            <div class="stat-label">équipements actifs</div>
-                        </div>
-                        <div class="stat-card">
-                            <h3>DM Total</h3>
-                            <div class="stat-value" id="totalDm">0</div>
-                            <div class="stat-label">dispositifs actifs</div>
-                        </div>
-                        <div class="stat-card">
-                            <h3>Vérifications en retard</h3>
-                            <div class="stat-value red" id="lateVerif">0</div>
-                            <div class="stat-label">à effectuer d'urgence</div>
-                        </div>
-                        <div class="stat-card">
-                            <h3>Prochainement</h3>
-                            <div class="stat-value" style="color: #f39c12;" id="soonVerif">0</div>
-                            <div class="stat-label">dans les 14 jours</div>
-                        </div>
-                    </div>
-                    
-                    <div class="alert-section">
-                        <h2>🔔 Alertes et rappels</h2>
-                        <div class="alert-list" id="alertList">
-                            <div class="alert-item info">
-                                <div class="alert-content">
-                                    <div class="alert-title">Chargement...</div>
-                                    <div class="alert-desc">Récupération des données depuis Google Sheets</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- MODULE 2: Vérifications BAES -->
-            <div class="module-container" id="module-verif-baes">
-                <div class="verifications-module">
-                    <div class="verification-header">
-                        <h2>Vérifications périodiques BAES (tous les 6 mois)</h2>
-                    </div>
-                    <div class="verifications-grid" id="verifBaesList"></div>
-                </div>
-            </div>
-            
-            <!-- MODULE 3: Vérifications DM -->
-            <div class="module-container" id="module-verif-dm">
-                <div class="verifications-module">
-                    <div class="verification-header">
-                        <h2>Vérifications périodiques DM (tous les 6 mois)</h2>
-                    </div>
-                    <div class="verifications-grid" id="verifDmList"></div>
-                </div>
-            </div>
-            
-            <!-- MODULE 4: Gestion équipements -->
-            <div class="module-container" id="module-gestion">
-                <div class="gestion-module">
-                    <div class="gestion-tabs">
-                        <button class="gestion-tab active" onclick="switchGestionTab('baes')">BAES</button>
-                        <button class="gestion-tab" onclick="switchGestionTab('dm')">DM</button>
-                        <button class="gestion-tab" onclick="switchGestionTab('historique')">Historique</button>
-                    </div>
-                    
-                    <div class="gestion-content">
-                        <!-- Gestion BAES -->
-                        <div id="gestion-baes-content">
-                            <button class="add-btn" onclick="openAddBaesModal()">+ Ajouter un BAES</button>
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Bâtiment</th>
-                                        <th>Emplacement</th>
-                                        <th>Matériel</th>
-                                        <th>Statut</th>
-                                        <th>Prochaine vérif</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="baesTableBody"></tbody>
-                            </table>
-                        </div>
-                        
-                        <!-- Gestion DM -->
-                        <div id="gestion-dm-content" class="hidden">
-                            <button class="add-btn" onclick="openAddDmModal()">+ Ajouter un DM</button>
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Bâtiment</th>
-                                        <th>Emplacement</th>
-                                        <th>Type</th>
-                                        <th>Statut</th>
-                                        <th>Prochaine vérif</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="dmTableBody"></tbody>
-                            </table>
-                        </div>
-                        
-                        <!-- Historique -->
-                        <div id="gestion-historique-content" class="hidden">
-                            <h3 style="margin-bottom: 15px;">Historique complet des modifications</h3>
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Type</th>
-                                        <th>ID</th>
-                                        <th>Action</th>
-                                        <th>Détails</th>
-                                        <th>Utilisateur</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="historyTableBody"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- MODAL: Vérification -->
-    <div class="modal" id="verificationModal">
-        <div class="modal-content">
-            <div class="modal-header" id="modalTitle">Vérifier un équipement</div>
-            <input type="hidden" id="verifType">
-            <input type="hidden" id="verifId">
-            
-            <div class="form-group">
-                <label>Emplacement</label>
-                <input type="text" id="verifLocation" readonly>
-            </div>
-            
-            <div class="form-group">
-                <label>État de fonctionnement *</label>
-                <select id="verifEtat" required>
-                    <option value="OK">✅ OK - Fonctionne correctement</option>
-                    <option value="Défaut">⚠️ Défaut mineur</option>
-                    <option value="À réparer">🔴 À réparer - Défaut important</option>
-                </select>
-            </div>
-            
-            <div class="form-group" id="baesTestsGroup">
-                <label>
-                    <input type="checkbox" id="verifAutonomie">
-                    Test d'autonomie effectué et conforme
-                </label>
-            </div>
-            
-            <div class="form-group" id="dmTestsGroup" class="hidden">
-                <label>
-                    <input type="checkbox" id="verifOuverture">
-                    Test d'ouverture effectué et conforme
-                </label>
-                <label>
-                    <input type="checkbox" id="verifFermeture">
-                    Test de fermeture effectué et conforme
-                </label>
-            </div>
-            
-            <div class="form-group">
-                <label>Observations / Commentaire</label>
-                <textarea id="verifObservations" placeholder="Remarques éventuelles, problèmes constatés..."></textarea>
-            </div>
-            
-            <div class="modal-actions">
-                <button class="modal-btn btn-cancel" onclick="closeVerificationModal()">Annuler</button>
-                <button class="modal-btn btn-submit" onclick="submitVerification()">✅ Valider la vérification</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- MODAL: Ajout/Modification équipement -->
-    <div class="modal" id="equipmentModal">
-        <div class="modal-content">
-            <div class="modal-header" id="equipModalTitle">Ajouter un équipement</div>
-            <input type="hidden" id="equipType">
-            <input type="hidden" id="equipId">
-            <input type="hidden" id="equipMode">
-            
-            <div class="form-group">
-                <label>Bâtiment *</label>
-                <select id="equipBatiment" required>
-                    <option>Bâtiment A</option>
-                    <option>Bâtiment B</option>
-                    <option>Bâtiment C</option>
-                    <option>Bâtiment D</option>
-                    <option>Bâtiment E</option>
-                    <option>Bâtiment F</option>
-                    <option>Garage</option>
-                    <option>Gymnase</option>
-                    <option>Ateliers</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>Emplacement *</label>
-                <input type="text" id="equipEmplacement" placeholder="Ex: Salle 101, Couloir RDC..." required>
-            </div>
-            
-            <!-- Champs spécifiques BAES -->
-            <div id="baesFields">
-                <div class="form-group">
-                    <label>Ancien matériel</label>
-                    <input type="text" id="equipAncien" placeholder="Ex: BAES Standard 6W">
-                </div>
-                <div class="form-group">
-                    <label>Nouveau matériel *</label>
-                    <input type="text" id="equipNouveau" placeholder="Ex: BAES LED 3W Legrand" required>
-                </div>
-            </div>
-            
-            <!-- Champs spécifiques DM -->
-            <div id="dmFields" class="hidden">
-                <div class="form-group">
-                    <label>Type de DM *</label>
-                    <input type="text" id="equipTypeDm" placeholder="Ex: Ferme-porte, Ventouse..." required>
-                </div>
-                <div class="form-group">
-                    <label>Marque</label>
-                    <input type="text" id="equipMarque" placeholder="Ex: GEZE, DORMA...">
-                </div>
-                <div class="form-group">
-                    <label>Modèle</label>
-                    <input type="text" id="equipModele" placeholder="Ex: TS 5000">
-                </div>
-            </div>
-
-            <!-- Champ commentaire -->
-            <div class="form-group">
-                <label>Commentaire initial (optionnel)</label>
-                <textarea id="equipCommentaire" placeholder="Remarques, informations complémentaires..."></textarea>
-            </div>
-            
-            <div class="modal-actions">
-                <button class="modal-btn btn-cancel" onclick="closeEquipmentModal()">Annuler</button>
-                <button class="modal-btn btn-submit" onclick="submitEquipment()">Enregistrer</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL: Commentaire -->
-    <div class="modal" id="commentModal">
-        <div class="modal-content">
-            <div class="modal-header" id="commentModalTitle">Ajouter un commentaire</div>
-            <div class="form-group">
-                <label id="commentModalLabel">Commentaire</label>
-                <textarea id="commentModalText" rows="4" placeholder="Votre commentaire..."></textarea>
-            </div>
-            <div class="modal-actions">
-                <button class="modal-btn btn-cancel" onclick="closeCommentModal(false)">Annuler</button>
-                <button class="modal-btn btn-submit" onclick="closeCommentModal(true)">Valider</button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // ===== CONFIGURATION GOOGLE ===== 
-        // 🔴 À CONFIGURER OBLIGATOIREMENT
+        // ===== CONFIGURATION GOOGLE =====
         const GOOGLE_CONFIG = {
             CLIENT_ID: '548033004728-vook12hof42404kjvhs6lhfb34p67igs.apps.googleusercontent.com',
             SPREADSHEET_ID: '1CgaBbXEBgaHAzKKKTaSVZrKkunrT_2R24MakfsrKsiw',
@@ -1002,9 +706,7 @@
             SCOPES: 'https://www.googleapis.com/auth/spreadsheets'
         };
 
-        // Le code JavaScript complet doit être ajouté ici
-        // Collez le contenu de gmao_complete_v2_commentaires.js après cette ligne
-        // ========================================
+// ========================================
 // APPLICATION GMAO BAES/DM - JavaScript Complet v2.0
 // École La Mache - AVEC SYSTÈME DE COMMENTAIRES
 // ========================================
@@ -1960,7 +1662,6 @@ function formatDateTime(date) {
 
 // ===== INITIALISATION =====
 window.onload = initGoogleAPI;
-
     </script>
 </body>
 </html>
